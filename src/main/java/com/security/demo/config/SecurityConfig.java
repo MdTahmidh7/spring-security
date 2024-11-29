@@ -28,6 +28,7 @@ public class SecurityConfig {
         http.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
+
     }
 
     @Bean
@@ -49,6 +50,4 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user1,user2);
     }
-
-
 }
