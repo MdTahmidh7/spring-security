@@ -50,4 +50,6 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user1,user2);
     }
+
+
 }
