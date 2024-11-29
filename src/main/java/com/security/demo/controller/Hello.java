@@ -2,16 +2,19 @@ package com.security.demo.controller;
 
 import com.security.demo.entity.Users;
 import com.security.demo.repo.UserRepo;
+import com.security.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class Hello {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserService userService;
 
 
     @GetMapping("")
@@ -24,7 +27,6 @@ public class Hello {
         return (CsrfToken)request.getAttribute("_csrf");
     }
 
-
     @PostMapping("/post-hello")
     public String postHello(@RequestBody String message){
         return message;
@@ -32,6 +34,16 @@ public class Hello {
 
     @GetMapping("/public")
     public Users getCSRFToken(@RequestParam Integer id){
-        return userRepo.findById(id).get();
+        return userService.findUserById(id);
+    }
+
+    @PostMapping("/public/register")
+    public Users createNewUser(@RequestBody Users user){
+       return userService.registerUser(user);
+    }
+
+    @GetMapping("/public/users")
+    public List<Users> getAllUser(){
+        return userService.getAllUsers();
     }
 }
