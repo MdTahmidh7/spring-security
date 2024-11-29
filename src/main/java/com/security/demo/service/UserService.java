@@ -3,6 +3,8 @@ package com.security.demo.service;
 import com.security.demo.entity.Users;
 import com.security.demo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,17 @@ public class UserService {
 
     public Users findUserById(Integer id) {
         return userRepo.findById(id).get();
+    }
+
+    public ResponseEntity<?> deleteUserById(Integer id) {
+
+        if(userRepo.findById(id).isPresent()){
+            userRepo.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        userRepo.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 }

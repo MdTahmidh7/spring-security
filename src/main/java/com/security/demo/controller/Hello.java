@@ -5,6 +5,7 @@ import com.security.demo.repo.UserRepo;
 import com.security.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +46,10 @@ public class Hello {
     @GetMapping("/public/users")
     public List<Users> getAllUser(){
         return userService.getAllUsers();
+    }
+
+    @DeleteMapping("/delete-user-by-id")
+    public ResponseEntity<?> deleteUserById(@RequestParam Integer id){
+        return userService.deleteUserById(id);
     }
 }
