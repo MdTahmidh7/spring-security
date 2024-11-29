@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .roles("USER")
                 .build();
 
+
+
         UserDetails user2 = User
                 .withDefaultPasswordEncoder()
                 .username("saju")
