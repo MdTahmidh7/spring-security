@@ -2,10 +2,11 @@ package com.security.demo.service;
 
 import com.security.demo.entity.Users;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 
+
 @Service
+@Slf4j
 public class JWTService {
+
+
 
     private String secretKey = "";
 
@@ -44,7 +49,7 @@ public class JWTService {
                 .add(claims)
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 300000))
+                //.expiration(new Date(System.currentTimeMillis() + 60000))
                 .and()
                 .signWith(getKey())
                 .compact();
@@ -67,16 +72,22 @@ public class JWTService {
 
     private Claims extractAllClaims(String token) {
 
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        }catch (ExpiredJwtException e){
+            log.error("Token has expired: " + e.getMessage());
+            return null;
+        }
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        //return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        return username.equals(userDetails.getUsername());
     }
 
     private boolean isTokenExpired(String token) {

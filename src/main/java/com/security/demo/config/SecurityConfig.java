@@ -1,6 +1,7 @@
 package com.security.demo.config;
 
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +19,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig{
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -39,7 +45,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                 request -> request.requestMatchers(
                                 "/public/**",
-                                "/api/v1/open/**")
+                                "/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
@@ -73,14 +79,32 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-
-                registry.addMapping("/**") // Apply to all API endpoints
-                        .allowedOrigins("*") // Allow all origins
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                        .allowedHeaders("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:4200")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS") // Include OPTIONS for preflight
+                        .allowedHeaders("*") // Allow all headers, including Authorization
+                        .exposedHeaders("Authorization") // Allow clients to see Authorization header
+                        .allowCredentials(true); // If credentials are needed (optional)
             }
         };
     }
+
+   /* @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("/**"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));  // Allow Authorization header
+        config.setAllowCredentials(true);  // If you're sending cookies or other credentials
+
+        source.registerCorsConfiguration("/**", config);  // Apply to all routes
+        return new CorsFilter();
+    }*/
+
+
+
 
 
     /*@Bean
