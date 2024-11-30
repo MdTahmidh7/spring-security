@@ -43,6 +43,12 @@ public class Hello {
        return userService.registerUser(user);
     }
 
+    @PostMapping("/public/login")
+    public String loginUser(@RequestBody Users user){
+        System.out.println(user);
+        return userService.verifyUser(user);
+    }
+
     @GetMapping("/public/users")
     public List<Users> getAllUser(){
         return userService.getAllUsers();
