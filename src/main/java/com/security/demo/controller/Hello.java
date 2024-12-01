@@ -1,6 +1,7 @@
 package com.security.demo.controller;
 
 
+import com.security.demo.dto.UserDTO;
 import com.security.demo.entity.Users;
 import com.security.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,8 +42,9 @@ public class Hello {
     }
 
     @PostMapping("/public/register")
-    public Users createNewUser(@RequestBody Users user){
-       return userService.registerUser(user);
+    public ResponseEntity<Users> createNewUser(@RequestBody UserDTO userDTO){
+        Users user = userService.registerUser(userDTO);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/public/login")

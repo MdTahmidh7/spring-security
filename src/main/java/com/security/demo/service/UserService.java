@@ -1,6 +1,9 @@
 package com.security.demo.service;
 
+import com.security.demo.dto.UserDTO;
 import com.security.demo.entity.Users;
+import com.security.demo.exception.UserAlreadyExistsException;
+import com.security.demo.mapper.UserMapper;
 import com.security.demo.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +28,19 @@ public class UserService {
     @Autowired
     private JWTService jwtService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
-    public Users registerUser(Users user){
-        if(user != null){
+    public Users registerUser(UserDTO userDTO){
+        if(userDTO != null){
+
+            if(userRepo.findByUsername(userDTO.getUsername()).isPresent()){
+                throw new UserAlreadyExistsException("User with username: " + userDTO.getUsername() + " already exists!");
+            }
+
+            Users user = userMapper.userDTOToUser(userDTO);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             return userRepo.save(user);
         }
