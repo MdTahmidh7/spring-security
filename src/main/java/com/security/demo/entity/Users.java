@@ -1,15 +1,24 @@
 package com.security.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
+import com.security.demo.dto.UserDTO;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@SqlResultSetMapping(
+        name = "UserDTOMapping",
+        classes = @ConstructorResult(
+                targetClass = UserDTO.class,
+                columns = {
+                        @ColumnResult(name = "username", type = String.class),
+                        @ColumnResult(name = "email", type = String.class)
+                }
+        )
+)
 public class Users {
 
 
