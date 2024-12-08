@@ -1,6 +1,7 @@
 package com.security.demo.controller;
 
 
+import com.security.demo.dto.UserDTO;
 import com.security.demo.entity.Users;
 import com.security.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class Hello {
@@ -39,11 +42,23 @@ public class Hello {
     }
 
     @PostMapping("/public/register")
-    public Users createNewUser(@RequestBody Users user){
-       return userService.registerUser(user);
+    public ResponseEntity<Users> createNewUser(@RequestBody UserDTO userDTO){
+        Users user = userService.registerUser(userDTO);
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/public/users")
+    @PostMapping("/public/login")
+    public ResponseEntity<?> loginUser(@RequestBody Users user){
+
+        String jwtToken = userService.verifyUser(user);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwtToken);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users")
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<Users> getAllUser(){
         return userService.getAllUsers();
     }
