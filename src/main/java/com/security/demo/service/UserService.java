@@ -35,6 +35,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private EmailService emailService;
+
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public Users registerUser(UserDTO userDTO){
@@ -101,8 +104,57 @@ public class UserService {
         if(userDTOs.isEmpty()){
             throw new UserNotFoundByUsernameAndEmail("User not found by username: " + username + " and email: " + email + "!");
         }else{
+
+            //generate a 6 digit otp
+            int otp = (int) (Math.random() * 900000) + 100000;
+
+            saveAndPublishOtp(username, otp, email);
+
             //return user in response
             return ResponseEntity.ok(userDTOs.get(0));
         }
+    }
+
+    private void saveAndPublishOtp(String username, int otp, String email) {
+
+        //save the otp to the database
+        Users user = userRepo.findByUsername(username).get();
+        user.setOtp(String.valueOf(otp));
+        userRepo.save(user);
+
+        //send email to the user
+        emailService.sendMail(
+                email,
+                "OTP Verification",
+                String.valueOf(otp));
+    }
+
+    public ResponseEntity<?> verifyOtp(String username, String email, Integer otp) {
+
+        Users user = userRepo.findByUsername(username).get();
+
+        if(user.getOtp().equals(String.valueOf(otp)) && user.getEmail().equals(email)){
+            user.setOtp(null);
+            userRepo.save(user);
+
+            CustomUserDto userDTO = new CustomUserDto(user.getUsername(), user.getEmail());
+            return ResponseEntity.ok(userDTO);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<?> resetPassword(String username, String email, String newPassword) {
+
+        Users user = userRepo.findByUsername(username).get();
+
+        if(user.getEmail().equals(email)){
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            userRepo.save(user);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

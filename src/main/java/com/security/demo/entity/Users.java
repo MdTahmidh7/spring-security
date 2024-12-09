@@ -32,6 +32,8 @@ public class Users {
 
     private String email;
 
+    private String otp;
+
 
     @Override
     public String toString() {

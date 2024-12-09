@@ -86,9 +86,28 @@ public class Hello {
 
     //Create public a controller for verify user that takes username and email
     @GetMapping("/public/verify-user")
-    public ResponseEntity<CustomUserDto> verifyUser(@RequestParam String username, @RequestParam String email){
+    public ResponseEntity<CustomUserDto> verifyUser(@RequestParam String username,
+                                                    @RequestParam String email){
 
         return userService.verifyUser(username, email);
+    }
+
+    //Create a public controller for verify otp that takes username , email and otp
+    @GetMapping("/public/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestParam String username,
+                                       @RequestParam String email,
+                                       @RequestParam Integer otp){
+
+        return userService.verifyOtp(username, email, otp);
+    }
+
+    //create a public controller for reset password that takes username and email and new password
+    @PostMapping("/public/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam String username,
+                                           @RequestParam String email,
+                                           @RequestParam String newPassword){
+
+        return userService.resetPassword(username, email, newPassword);
     }
 
 
