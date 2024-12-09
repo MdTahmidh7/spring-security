@@ -17,6 +17,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    //Handle custom exception (e.g., UserNotFoundByUsernameAndEmail)
+    @ExceptionHandler(UserNotFoundByUsernameAndEmail.class)
+    public ResponseEntity<Object> handleUserNotFoundByUsernameAndEmail(UserNotFoundByUsernameAndEmail ex) {
+        // Return a detailed response with the error message and a 404 NOT_FOUND status code
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
     // Handle other general exceptions if needed
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex) {
