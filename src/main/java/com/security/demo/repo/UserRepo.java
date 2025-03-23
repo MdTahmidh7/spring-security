@@ -1,15 +1,8 @@
 package com.security.demo.repo;
 
-import com.security.demo.dto.CustomUserDto;
-import com.security.demo.dto.UserDTO;
 import com.security.demo.entity.Users;
-import jakarta.persistence.ColumnResult;
-import jakarta.persistence.ConstructorResult;
-import jakarta.persistence.QueryHint;
-import jakarta.persistence.SqlResultSetMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
