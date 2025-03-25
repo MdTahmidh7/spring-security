@@ -45,4 +45,17 @@ public class ItemServiceImpl implements ItemService {
 
         return items.map(itemMapper::toDTO);
     }
+
+    @Override
+    public ItemDTO updateItem(Long id, ItemDTO itemDTO) {
+
+        if (!itemRepository.existsById(id)) {
+            throw new IllegalArgumentException("Item not found");
+        }
+
+        Item item = itemMapper.toEntity(itemDTO);
+        //item.setId(id);
+        return itemMapper.toDTO(itemRepository.save(item));
+
+    }
 }

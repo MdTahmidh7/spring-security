@@ -13,15 +13,19 @@ public interface ItemMapper {
 
     ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "price", target = "price")
-    @Mapping(source = "createdDate", target = "createdDate")
+    @Mapping(source = "createdDateTime", target = "createdDateTime")
+    @Mapping(source = "endDateTime", target = "endDateTime")
     @Mapping(source = "image", target = "image")
     Item toEntity(ItemDTO itemDTO);
 
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "price", target = "price")
-    @Mapping(source = "createdDate", target = "createdDate")
+    @Mapping(source = "createdDateTime", target = "createdDateTime")
+    @Mapping(source = "endDateTime", target = "endDateTime")
     @Mapping(source = "image", target = "image")
     ItemDTO toDTO(Item item);
 }

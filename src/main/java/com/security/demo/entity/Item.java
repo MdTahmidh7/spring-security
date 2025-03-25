@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -22,8 +22,14 @@ public class Item {
 
     private Double price;
 
-    private LocalDate createdDate;
+    private LocalDateTime createdDateTime;
+
+    private LocalDateTime endDateTime;
 
     private String image;
+
+    private String description;
+
+    private Boolean isDeleted;
 
 }

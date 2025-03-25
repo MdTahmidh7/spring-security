@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 public class Item {
@@ -32,6 +32,16 @@ public class Item {
         return ResponseEntity.ok(response);
     }
 
-
+    //create an API for Update Item
+    @PutMapping("/item/{id}/update")
+    public ResponseEntity<ItemDTO> updateItem(
+            @PathVariable Long id,
+            @RequestBody ItemDTO itemDTO
+    )
+    {
+        ItemDTO response = itemService.updateItem(id, itemDTO);
+        return ResponseEntity.ok(response);
+    }
+    //create an API for Delete Item
 
 }

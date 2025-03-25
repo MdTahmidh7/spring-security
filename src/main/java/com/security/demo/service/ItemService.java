@@ -10,4 +10,6 @@ public interface ItemService {
     ItemDTO createItem(ItemDTO itemDTO);
 
     Page<ItemDTO> getAllItems(int page, int size);
+
+    ItemDTO updateItem(Long id, ItemDTO itemDTO);
 }
