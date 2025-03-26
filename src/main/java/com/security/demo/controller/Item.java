@@ -42,6 +42,15 @@ public class Item {
         ItemDTO response = itemService.updateItem(id, itemDTO);
         return ResponseEntity.ok(response);
     }
-    //create an API for Delete Item
+
+    //API for Delete Item
+    @DeleteMapping("/item/{id}/delete")
+    public ResponseEntity<Boolean> deleteItem(
+            @PathVariable Long id
+    )
+    {
+        Boolean isDeleted = itemService.deleteItem(id);
+        return ResponseEntity.ok(isDeleted);
+    }
 
 }

@@ -12,4 +12,6 @@ public interface ItemService {
     Page<ItemDTO> getAllItems(int page, int size);
 
     ItemDTO updateItem(Long id, ItemDTO itemDTO);
+
+    Boolean deleteItem(Long id);
 }

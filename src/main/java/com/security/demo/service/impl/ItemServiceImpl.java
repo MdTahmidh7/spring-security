@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.stereotype.Service;
 
-
-
-
+import java.util.Optional;
 
 
 @Service
@@ -57,5 +55,20 @@ public class ItemServiceImpl implements ItemService {
         //item.setId(id);
         return itemMapper.toDTO(itemRepository.save(item));
 
+    }
+
+    @Override
+    public Boolean deleteItem(Long id) {
+
+        Optional<Item> itemOptional = itemRepository.findById(id);
+
+        if (itemOptional.isPresent()) {
+            Item item = itemOptional.get();
+            item.setIsDeleted(true);
+            itemRepository.save(item);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
