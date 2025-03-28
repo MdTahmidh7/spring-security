@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -36,10 +38,19 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Page<ItemDTO> getAllItems(int page, int size) {
+    public Page<ItemDTO> getAllItems(LocalDate filterFromDate,
+                                     LocalDate filterToDate,
+                                     int page,
+                                     int size) {
+
+        LocalDateTime startDateTime = filterFromDate.atStartOfDay();
+        LocalDateTime endDateTime = filterToDate.atTime(23, 59, 59);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Item> items = itemRepository.findAll(pageable);
+        Page<Item> items = itemRepository.findAll(
+                startDateTime,
+                endDateTime,
+                pageable);
 
         return items.map(itemMapper::toDTO);
     }

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @RestController
@@ -25,10 +27,16 @@ public class Item {
 
     @GetMapping("/items")
     public ResponseEntity<Page<ItemDTO>> getAllItems(
+            @RequestParam(required = true) LocalDate filterFromDate,
+            @RequestParam(required = true)LocalDate filterToDate,
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize
     ){
-        Page<ItemDTO> response = itemService.getAllItems(pageNo, pageSize);
+        Page<ItemDTO> response = itemService.getAllItems(
+                filterFromDate,
+                filterToDate,
+                pageNo,
+                pageSize);
         return ResponseEntity.ok(response);
     }
 
