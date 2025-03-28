@@ -82,4 +82,14 @@ public class ItemServiceImpl implements ItemService {
             return false;
         }
     }
+
+    @Override
+    public Page<ItemDTO> getItemsBySearchParam(String searchParam,
+                                               int pageNo,
+                                               int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Item> items = itemRepository.findBySearchParam(searchParam, pageable);
+        return items.map(itemMapper::toDTO);
+    }
 }

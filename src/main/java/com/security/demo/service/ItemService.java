@@ -20,4 +20,8 @@ public interface ItemService {
     ItemDTO updateItem(Long id, ItemDTO itemDTO);
 
     Boolean deleteItem(Long id);
+
+    Page<ItemDTO> getItemsBySearchParam(String searchParam,
+                                        int pageNo,
+                                        int pageSize);
 }

@@ -61,4 +61,17 @@ public class Item {
         return ResponseEntity.ok(isDeleted);
     }
 
+    @GetMapping("/items/search")
+    public ResponseEntity<Page<ItemDTO>> searchItems(
+            @RequestParam(required = false) String searchParam,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize
+    ){
+        Page<ItemDTO> response = itemService.getItemsBySearchParam(
+                searchParam,
+                pageNo,
+                pageSize);
+        return ResponseEntity.ok(response);
+    }
+
 }

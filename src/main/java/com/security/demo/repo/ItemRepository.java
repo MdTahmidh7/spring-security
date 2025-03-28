@@ -25,4 +25,12 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
                        LocalDateTime filterToDate,
                        @NonNull Pageable pageable);
 
+    @Query("""
+            SELECT item FROM Item item
+            WHERE LOWER(item.name) like LOWER(concat('%', :searchParam, '%'))
+            AND (item.isDeleted IS NULL OR item.isDeleted = false)
+            ORDER BY item.createdDateTime DESC
+            """)
+    @NonNull
+    Page<Item> findBySearchParam(String searchParam, Pageable pageable);
 }
