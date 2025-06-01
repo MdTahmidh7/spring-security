@@ -33,6 +33,12 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        // Skip JWT check for OPTIONS requests (CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         HttpServletRequest req = (HttpServletRequest) request;
         System.out.println("Headers:");
         req.getHeaderNames().asIterator()
@@ -59,7 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 // Handle other exceptions related to token parsing
                 System.err.println("Error while parsing token: " + e.getMessage());
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid token");
                 return;
             }
